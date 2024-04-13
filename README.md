@@ -1,2 +1,2 @@
 # PyPoker
-Poker bot implemented in Python.
+Poker bot implemented in Python (work in progress).
