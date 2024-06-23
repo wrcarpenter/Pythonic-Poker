@@ -22,6 +22,9 @@ newdeck = deck.random.shuffle()
 
 #%%
 
+# todo: card values
+# 
+
 class Deck:
     
     '''
@@ -50,7 +53,6 @@ class Deck:
             s += "%s\n" % c
         return s    
     
-    
     def deck_size(self):
         return len(self.cards)  # should return 52 cards unless deck is smaller
   
@@ -58,8 +60,13 @@ class Deck:
         # shuffle the deck
         random.shuffle(self.cards)
     
-    def card(self):
+    def take_card(self):
+        # removes last card in deck, i.e. deals the card
         return self.cards.pop() 
+    
+    def see_card(self):
+        # shows first card in deck, does not remove 
+        return self.cards[0]
         
     def hand(self):
         # deal a two-card hand to a player
@@ -82,9 +89,11 @@ def main():
     
     print(game_deck.cards)
     
-    card = game_deck.card()
+    card = game_deck.take_card()
     print("   ")
     print(card)
+    
+    print(game_deck.deck_size())
     
 
 if __name__ == "__main__":
