@@ -1,29 +1,19 @@
 # Poker Game Engine
 # Willam Carpenter
-# April 2024
-
+# June 2024
 
 import numpy as np
 import random
 
-# class Deck - a deck of cards 
-# class Pot - represents the game pot ... 
-# class Dealer - deals out cards from a deck  
-# class Player - one poker player that will have a given hand, etc. 
-# class Game - this will be a interesting program ... simulates a game and keeps all the game history (each hand, what the players played, bet, won, etc. lots of data)
+# class Deck     - a deck of cards 
+# class Pot      - represents the game pot ... 
+# class Dealer   - deals out cards from a deck  
+# class Player   - one poker player that will have a given hand, etc. 
+# class Game     - this will be a interesting program ... simulates a game and keeps all the game history (each hand, what the players played, bet, won, etc. lots of data)
 # class Rankings - hand rankings 
 # use tuples to create the deck
 
-card_categories = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-cards_list = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
-deck = [(card, category) for category in card_categories for card in cards_list]
-
-newdeck = deck.random.shuffle()
-
 #%%
-
-# todo: card values
-# 
 
 class Deck:
     
@@ -70,10 +60,60 @@ class Deck:
         
     def hand(self):
         # deal a two-card hand to a player
-        pass    
+        pass
 
-def main():
+class Player:
     
+    def __init__(self, stack, hand):
+        self.stack = stack  # define the starting stack
+        self.hand  = []     # empty hand
+        
+    def get_card(self, card):
+        # throw error if hand is larger than two cards
+        self.hand.append(card)
+        
+    def hand(self):
+        return self.hand
+    
+    def first_card(self):
+        return self.hand[0]
+    
+    def second_card(self):
+        return self.hand[1]
+
+    def stack_size(self):
+        return self.stack
+    
+    def bet(self, betsize):
+        
+        if self.stack_size() < betsize:
+            print("Caution: Bet larger than Player Pot.")
+        
+        self.stack = self.stack - bet    
+                
+class Pot:
+    
+    # constructor, set pot to 0 
+    def __init__(self, size):
+        
+        self.size = 0
+
+    # function purely for adding a pot blind 
+    def add_blind(self, little):
+        
+        self.size = self.size + little
+    
+    def add_bet(self, bet):
+        
+        self.size = self.size + bet
+   
+    def pot_size(self):
+        
+        return self.size 
+
+# Testing 
+if __name__ == "__main__":
+
     # creates a fresh deck of 52 cards, not shuffled 
     game_deck = Deck()
     
@@ -94,10 +134,5 @@ def main():
     print(card)
     
     print(game_deck.deck_size())
-    
-
-if __name__ == "__main__":
-
-    main()
 
 
