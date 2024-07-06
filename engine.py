@@ -14,7 +14,20 @@ import random
 # use tuples to create the deck
 
 #%%
+# Basic poker engine framework - strategy built on top of this 
+# Strategy
+# effective stack size, etc.
 
+class Game:
+    
+    def __init__(self, little, big, buyin):
+        
+        self.little = little  # little blind 
+        self.big    = big     # big blind 
+        self.buyin  = buyin   # player buy-in
+        # pot should be created and set to zero
+        # define number of players in game and initilize their stacks
+        
 class Deck:
     
     '''
@@ -58,10 +71,6 @@ class Deck:
         # shows first card in deck, does not remove 
         return self.cards[0]
         
-    def hand(self):
-        # deal a two-card hand to a player
-        pass
-
 class Player:
     
     def __init__(self, stack, hand):
@@ -99,9 +108,9 @@ class Pot:
         self.size = 0
 
     # function purely for adding a pot blind 
-    def add_blind(self, little):
+    def add_blind(self, blind):
         
-        self.size = self.size + little
+        self.size = self.size + blind
     
     def add_bet(self, bet):
         
