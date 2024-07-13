@@ -13,31 +13,87 @@ import random
 # class Rankings  - hand rankings 
 # use tuples to create the deck
 
-
 # Card deck constraints
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 RANKS = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
 
+
 class Game:
     
-    def __init__(self, little, big, buyin):
+    '''
+    Poker Game Simulation 
+    
+    Rounds can be played until one player wins or a defined number to end game.
+    Results should be stored down in some kind of format for data.
+    
+    '''
+    
+    def __init__(self, little, big, buyin, numplay):
         
-        self.little = little  # little blind 
-        self.big    = big     # big blind 
-        self.buyin  = buyin   # player buy-in
+        self.little  = little                  # little blind amt
+        self.big     = big                     # big blind amt
+        self.buyin   = buyin                   # player buy-in which will be their stack sizes
+        
+        # now each player will have a seat too (from to 1 to num)
+        self.players = create_players(numplay) # based on number of players
+        
+        self.pot     = Pot(0)                  # empty Pot object
+
+    def create_players(num, buyin):
+        
+        players = [] # empty list
+        
+        for i in range(0, num):
+            hand = [] # player starts with empty hand
+            players.append(buyin, hand) 
+
+    def play_round(self):
+        
+        
+        # initialize a POT
+        self.pot = Pot(0)
+        
+        
+        
+        
+        # 'create a deck' and shuffle it (dealer is doing this)
+        # create a new pot 
+        # create a new empty set of community cards
+        # determine who is the sb and bb 
+        # commence initial sb and bb into pot
+        # commence dealing cards
+        # commence first round of betting from players pre-flop
+        # commence flop 
+        # commence betting round 
+        # etc
+        
+        pass
+        
+        
         # pot should be created and set to zero
         # define number of players in game and initilize their stacks
+        # need to define intial empty set of community cards
+        # need to define a deck for the game?? then this deck can be reshuffled
 
-
+        
 class Card:
+    
+    '''
+    Playing Card
+    
+    Creates individual playing cards that are used to create a deck and dealt
+    to players.
+    
+    '''
 
-    def __init__(self, suit, value):
-        self.suit  = suit 
-        self.value = value
+    def __init__(self, rank, suit):
+        self.rank = rank 
+        self.suit = suit
+   
     
     def __str__(self):
-        return self.suit + ' of ' + self.value 
-
+        return self.rank + ' of ' + self.suit
+    
 class Deck:
     
     '''
@@ -65,13 +121,14 @@ class Deck:
         # create the deck and fill with card objects 
         for suit in SUITS:
             for rank in RANKS:
-                deck.append(Card(rank, suit))
+                deck.append(Card(rank, suit))  # card object
      
         return deck
     
     def __str__(self):
         # string method to display current deck if needed
         d = ''
+        
         for c in self.cards:
             d = d + str(c) + ' | '
         
@@ -94,16 +151,26 @@ class Deck:
         
 class Player:
     
-    def __init__(self, stack, hand):
+    '''
+    Poker Player Object 
+    
+    Stack starts as the game 'buy-in'; all players have same size stack
+    Each player has a seat at the table and seats do not change during a game
+    
+    
+    ''' 
+    
+    def __init__(self, stack, hand, seat):
         self.stack = stack  # define the starting stack
         self.hand  = []     # empty hand
+        self.seat  = seat   # seat number, players do not move seats in game
         
     def get_card(self, card):
         # throw error if hand is larger than two cards
         self.hand.append(card)
         
     def hand(self):
-        return self.hand
+        return self.hand # two card objects
     
     def first_card(self):
         return self.hand[0]
@@ -126,7 +193,7 @@ class Pot:
     # constructor, set pot to 0 
     def __init__(self, size):
         
-        self.size = 0
+        self.size = size
 
     # function purely for adding a pot blind 
     def add_blind(self, blind):
