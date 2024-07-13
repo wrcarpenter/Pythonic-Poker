@@ -1,0 +1,176 @@
+# Poker Game Engine
+# Willam Carpenter
+# June 2024
+
+import numpy as np
+import random
+
+# class Deck      - a deck of cards 
+# class Pot       - represents the game pot ... 
+# class Dealer    - deals out cards from a deck  
+# class Player    - one poker player that will have a given hand, etc. 
+# class Game      - this will be a interesting program ... simulates a game and keeps all the game history (each hand, what the players played, bet, won, etc. lots of data)
+# class Rankings  - hand rankings 
+# use tuples to create the deck
+
+
+# Card deck constraints
+SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+RANKS = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
+
+class Game:
+    
+    def __init__(self, little, big, buyin):
+        
+        self.little = little  # little blind 
+        self.big    = big     # big blind 
+        self.buyin  = buyin   # player buy-in
+        # pot should be created and set to zero
+        # define number of players in game and initilize their stacks
+
+
+class Card:
+
+    def __init__(self, suit, value):
+        self.suit  = suit 
+        self.value = value
+    
+    def __str__(self):
+        return self.suit + ' of ' + self.value 
+
+class Deck:
+    
+    '''
+    Poker Deck class 
+    
+    create_deck  : initialize a deck of 52 playing cards
+    deck_size    : show current size of deck (could be less than 52 in game)
+    shuffle      : mix up the card objects in the deck
+    take_card    : pop the card from the stack (fully removes it)
+    see_card     : displays the top card (does not remove it)
+    
+    '''
+
+    def __init__(self):
+
+        self.cards = self.create_deck()
+        self.size  = self.deck_size()
+
+        
+    def create_deck(self):
+        
+        # empty deck list
+        deck = []
+        
+        # create the deck and fill with card objects 
+        for suit in SUITS:
+            for rank in RANKS:
+                deck.append(Card(rank, suit))
+     
+        return deck
+    
+    def __str__(self):
+        # string method to display current deck if needed
+        d = ''
+        for c in self.cards:
+            d = d + str(c) + ' | '
+        
+        return d
+        
+    def deck_size(self):
+        return len(self.cards)  # should return 52 cards unless deck is smaller
+  
+    def shuffle(self):
+        # shuffle the deck
+        random.shuffle(self.cards)
+    
+    def take_card(self):
+        # removes last card in deck, i.e. deals the card
+        return self.cards.pop() 
+    
+    def see_card(self):
+        # shows first card in deck, does not remove 
+        return self.cards[0]
+        
+class Player:
+    
+    def __init__(self, stack, hand):
+        self.stack = stack  # define the starting stack
+        self.hand  = []     # empty hand
+        
+    def get_card(self, card):
+        # throw error if hand is larger than two cards
+        self.hand.append(card)
+        
+    def hand(self):
+        return self.hand
+    
+    def first_card(self):
+        return self.hand[0]
+    
+    def second_card(self):
+        return self.hand[1]
+
+    def stack_size(self):
+        return self.stack
+    
+    def bet(self, betsize):
+        
+        if self.stack_size() < betsize:
+            print("Exception: Bet larger than player stack.")
+        
+        self.stack = self.stack - bet    
+                
+class Pot:
+    
+    # constructor, set pot to 0 
+    def __init__(self, size):
+        
+        self.size = 0
+
+    # function purely for adding a pot blind 
+    def add_blind(self, blind):
+        
+        self.size = self.size + blind
+    
+    def add_bet(self, bet):
+        
+        self.size = self.size + bet
+   
+    def pot_size(self):
+        
+        return self.size 
+
+# Testing 
+if __name__ == "__main__":
+
+    # creates a fresh deck of 52 cards, not shuffled 
+    d = Deck()
+    
+    print(d)
+    print("   ")
+    
+    print("Size of the created deck: ", d.deck_size())
+    print("   ")
+    
+    print("Shuffling deck...")
+    d.shuffle()
+    print("    ")
+    print("New Deck:")
+    print("         ")
+    print(d)
+    
+    
+    print("Removing card from the deck...")    
+    
+    # taking a card object
+    card = d.take_card()
+    print("   ")
+    # showing the card object here in a string format
+    print("Card removed: ", card)
+    
+    
+    print("    ")
+    print(d.deck_size())
+
+
