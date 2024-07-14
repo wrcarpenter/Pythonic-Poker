@@ -39,7 +39,7 @@ class Game:
         self.bb      = 0        # big blind position
         
         self.pot     = Pot(0)   # empty Pot object
-        self.deck    = Deck()     # deck object
+        self.deck    = Deck()   # deck object
         self.round   = 0        # no rounds played
         
         self.commun  = []       # empty community of cards 
@@ -83,9 +83,23 @@ class Game:
         self.pot.add_blind(self.small) 
         self.pot.add_blind(self.big)
         
-        # Deal out cards
+        # Deal out cards to the players
+        for i in range(0,2):
+            for j in range(0, len(self.players)):
+                # get a card from the deck
+                self.players[j].get_card(self.deck.take_card())
+                
+        # commence pre-flop bets
+        # this is where the conditional betting model gets complex a bit
         
+        # Deal out 3 flop cards to commumnity
+        # Burn card
+        self.deck.take_card()
+        # Deal out flop
+        for i in range(0,3):
+            self.commun.append(self.deck.take_card())
         
+        # next round of betting here
         
         # players make pre-flop bets
         # need to handle the event of bet, raise, reraise, etc.
@@ -193,11 +207,11 @@ class Player:
     def __init__(self, stack, hand, seat):
         self.stack = stack  # define the starting stack
         self.hand  = []     # empty hand
-        self.seat  = seat   # seat number, players do not move seats in game
+        self.seat  = seat+1   # seat number, players do not move seats in game
     
     def __str__(self):
                 
-        p = "Player " + str(self.seat) + "Hand: " + str(self.first_card) + " | " + str(self.second_card)
+        p = "Player " + str(self.seat) + "\n" + str(self.hand[0]) + " | " + str(self.hand[1])
         
         return p 
         
@@ -207,7 +221,10 @@ class Player:
         self.hand.append(card)
         
     def hand(self):
-        return self.hand # two card objects
+        h = ''
+        for c in self.hand:
+            h = h + str(c) + " | "
+        return h # two card objects
     
     def first_card(self):
         return self.hand[0]
@@ -275,6 +292,11 @@ if __name__ == "__main__":
     print(g.pot.pot_size())
 
     g.play_round()
+    
+    for i in range(0, len(g.players)):    
+        print(g.players[i])
+        print("__________")
+    
     
     
     # create a game
