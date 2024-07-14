@@ -2,21 +2,16 @@
 # Willam Carpenter
 # June 2024
 
+# An excercise in object-oriented programming and game strategy. 
+# Game engine underpins poker strategies and game data collection. 
+
 import numpy as np
 import random
-
-# class Deck      - a deck of cards 
-# class Pot       - represents the game pot ... 
-# class Dealer    - deals out cards from a deck  
-# class Player    - one poker player that will have a given hand, etc. 
-# class Game      - this will be a interesting program ... simulates a game and keeps all the game history (each hand, what the players played, bet, won, etc. lots of data)
-# class Rankings  - hand rankings 
-# use tuples to create the deck
-
 
 # Card deck constraints
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 RANKS = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
+
 
 class Game:
     
@@ -26,7 +21,12 @@ class Game:
     Rounds can be played until one player wins or a defined number to end game.
     Results should be stored down in some kind of format for data.
     
+    Blinds are made before dealing cards and are mandatory from players.
+    
     No 'dealer' object exists here but that might not be necessary. 
+    
+    A betting cap could be added for individual rounds but that adds another
+    layer of complexity to the game.
     
     '''
     
@@ -39,7 +39,7 @@ class Game:
         self.bb      = 0        # big blind position
         
         self.pot     = Pot(0)   # empty Pot object
-        self.deck  = Deck()     # deck object
+        self.deck    = Deck()     # deck object
         self.round   = 0        # no rounds played
         
         self.commun  = []       # empty community of cards 
@@ -75,13 +75,20 @@ class Game:
         self.deck = Deck()  # new deck object? Redundant but necessary
         self.deck.shuffle() # shuffle deck
         
-        # small blind
-        self.pot.add_blind(self.players[self.sb].bet(self.small)) 
+        # Players make blinds (i.e. bets before seeing any cards)
+        self.players[self.sb].bet(self.small)
+        self.players[self.bb].bet(self.big)
         
-        # big blind                   
-        self.pot.add_blind(self.players[self.bb].bet(self.big))        
+        # dealer collects blinds
+        self.pot.add_blind(self.small) 
+        self.pot.add_blind(self.big)
+        
+        # Deal out cards
+        
+        
         
         # players make pre-flop bets
+        # need to handle the event of bet, raise, reraise, etc.
     
         # 'create a deck' and shuffle it (dealer is doing this)
         # create a new pot 
@@ -187,7 +194,14 @@ class Player:
         self.stack = stack  # define the starting stack
         self.hand  = []     # empty hand
         self.seat  = seat   # seat number, players do not move seats in game
+    
+    def __str__(self):
+                
+        p = "Player " + str(self.seat) + "Hand: " + str(self.first_card) + " | " + str(self.second_card)
         
+        return p 
+        
+     
     def get_card(self, card):
         # throw error if hand is larger than two cards
         self.hand.append(card)
@@ -209,7 +223,7 @@ class Player:
         if self.stack_size() < betsize:
             print("Exception: Bet larger than player stack.")
         
-        self.stack = self.stack - bet    
+        self.stack = self.stack - betsize    
       
     def fold(self):
         # game needs to update for this 
@@ -241,12 +255,31 @@ if __name__ == "__main__":
     
     g = Game(10, 20, 300, 6)
 
-    g.pot.add_bet(100)
+    
     print(g.pot.pot_size())
+    print('-------------')
+    
 
     print(g.deck)
+    
+    print(g.sb)
+    print(g.bb)
+    print(g.buyin)
+    print(type(g.small))
+    
+    print(g.players[0].stack_size())
+    print(g.players[1].stack_size())
+    
+    
+    print('New pot')
+    print(g.pot.pot_size())
+
+    g.play_round()
+    
+    
     # create a game
-    print(g.players)
+    # for person in g.players:
+    #   print(person)
 
     # # creates a fresh deck of 52 cards, not shuffled 
     # d = Deck()
