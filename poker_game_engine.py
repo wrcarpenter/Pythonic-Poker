@@ -28,6 +28,9 @@ class Game:
     A betting cap could be added for individual rounds but that adds another
     layer of complexity to the game.
     
+    There is no min-raise set either.
+    
+    
     '''
     
     def __init__(self, small, big, buyin, numplay):
@@ -35,8 +38,9 @@ class Game:
         self.small   = small    # little blind amt
         self.big     = big      # big blind amt
         self.buyin   = buyin    # player buy-in which will be their stack sizes
-        self.sb      = 1        # small blind position
-        self.bb      = 0        # big blind position
+        self.sb      = 0        # small blind position, first next to dealer
+        self.bb      = 1        # big blind position, next to sb
+        self.fb      = 2        # first bet position
         
         self.pot     = Pot(0)   # empty Pot object
         self.deck    = Deck()   # deck object
@@ -68,7 +72,7 @@ class Game:
 
     def play_round(self):
         
-        self.round += self.round # update game round 
+        self.round += self.round # update to record game rounds 
         
         self.pot = Pot(0)   # new pot object set to 0
         # deck of cards
@@ -78,6 +82,9 @@ class Game:
         # Players make blinds (i.e. bets before seeing any cards)
         self.players[self.sb].bet(self.small)
         self.players[self.bb].bet(self.big)
+        
+        # need to update blind positions for next round 
+        
         
         # dealer collects blinds
         self.pot.add_blind(self.small) 
@@ -90,6 +97,9 @@ class Game:
                 self.players[j].get_card(self.deck.take_card())
                 
         # commence pre-flop bets
+        # start
+        
+        
         # this is where the conditional betting model gets complex a bit
         
         # Deal out 3 flop cards to commumnity
@@ -295,7 +305,7 @@ if __name__ == "__main__":
     
     for i in range(0, len(g.players)):    
         print(g.players[i])
-        print("__________")
+        print("__________\n")
     
     
     
