@@ -13,10 +13,10 @@ import random
 # class Rankings  - hand rankings 
 # use tuples to create the deck
 
+
 # Card deck constraints
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 RANKS = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
-
 
 class Game:
     
@@ -26,36 +26,63 @@ class Game:
     Rounds can be played until one player wins or a defined number to end game.
     Results should be stored down in some kind of format for data.
     
+    No 'dealer' object exists here but that might not be necessary. 
+    
     '''
     
-    def __init__(self, little, big, buyin, numplay):
+    def __init__(self, small, big, buyin, numplay):
         
-        self.little  = little                  # little blind amt
-        self.big     = big                     # big blind amt
-        self.buyin   = buyin                   # player buy-in which will be their stack sizes
+        self.small   = small    # little blind amt
+        self.big     = big      # big blind amt
+        self.buyin   = buyin    # player buy-in which will be their stack sizes
+        self.sb      = 1        # small blind position
+        self.bb      = 0        # big blind position
+        
+        self.pot     = Pot(0)   # empty Pot object
+        self.deck  = Deck()     # deck object
+        self.round   = 0        # no rounds played
+        
+        self.commun  = []       # empty community of cards 
         
         # now each player will have a seat too (from to 1 to num)
-        self.players = create_players(numplay) # based on number of players
-        
-        self.pot     = Pot(0)                  # empty Pot object
+        self.players = self.create_players(numplay, buyin) # based on number of players
 
-    def create_players(num, buyin):
+
+    def create_players(self, numplay, buyin):
         
-        players = [] # empty list
+        players = []  # empty list
+        hand    = []
         
-        for i in range(0, num):
-            hand = [] # player starts with empty hand
-            players.append(buyin, hand) 
+        for i in range(0, numplay):
+            # player starts with an empty hand
+            p    = Player(buyin, hand, i)
+            # Create a player and assign them a seat
+            players.append(p)
+       
+        return players    
+            
+    def update_blinds(self, small, big):
+        # its possible that blinds are updated during the game
+        self.small = small
+        self.big   = big
 
     def play_round(self):
         
+        self.round += self.round # update game round 
         
-        # initialize a POT
-        self.pot = Pot(0)
+        self.pot = Pot(0)   # new pot object set to 0
+        # deck of cards
+        self.deck = Deck()  # new deck object? Redundant but necessary
+        self.deck.shuffle() # shuffle deck
         
+        # small blind
+        self.pot.add_blind(self.players[self.sb].bet(self.small)) 
         
+        # big blind                   
+        self.pot.add_blind(self.players[self.bb].bet(self.big))        
         
-        
+        # players make pre-flop bets
+    
         # 'create a deck' and shuffle it (dealer is doing this)
         # create a new pot 
         # create a new empty set of community cards
@@ -66,15 +93,11 @@ class Game:
         # commence flop 
         # commence betting round 
         # etc
-        
-        pass
-        
-        
+
         # pot should be created and set to zero
         # define number of players in game and initilize their stacks
         # need to define intial empty set of community cards
         # need to define a deck for the game?? then this deck can be reshuffled
-
         
 class Card:
     
@@ -187,7 +210,11 @@ class Player:
             print("Exception: Bet larger than player stack.")
         
         self.stack = self.stack - bet    
-                
+      
+    def fold(self):
+        # game needs to update for this 
+        return "Fold"
+          
 class Pot:
     
     # constructor, set pot to 0 
@@ -195,11 +222,12 @@ class Pot:
         
         self.size = size
 
-    # function purely for adding a pot blind 
+    # function purely for adding a pot blind for readability  
     def add_blind(self, blind):
         
         self.size = self.size + blind
     
+    # add player bet
     def add_bet(self, bet):
         
         self.size = self.size + bet
@@ -210,34 +238,43 @@ class Pot:
 
 # Testing 
 if __name__ == "__main__":
+    
+    g = Game(10, 20, 300, 6)
 
-    # creates a fresh deck of 52 cards, not shuffled 
-    d = Deck()
+    g.pot.add_bet(100)
+    print(g.pot.pot_size())
+
+    print(g.deck)
+    # create a game
+    print(g.players)
+
+    # # creates a fresh deck of 52 cards, not shuffled 
+    # d = Deck()
     
-    print(d)
-    print("   ")
+    # print(d)
+    # print("   ")
     
-    print("Size of the created deck: ", d.deck_size())
-    print("   ")
+    # print("Size of the created deck: ", d.deck_size())
+    # print("   ")
     
-    print("Shuffling deck...")
-    d.shuffle()
-    print("    ")
-    print("New Deck:")
-    print("         ")
-    print(d)
-    
-    
-    print("Removing card from the deck...")    
-    
-    # taking a card object
-    card = d.take_card()
-    print("   ")
-    # showing the card object here in a string format
-    print("Card removed: ", card)
+    # print("Shuffling deck...")
+    # d.shuffle()
+    # print("    ")
+    # print("New Deck:")
+    # print("         ")
+    # print(d)
     
     
-    print("    ")
-    print(d.deck_size())
+    # print("Removing card from the deck...")    
+    
+    # # taking a card object
+    # card = d.take_card()
+    # print("   ")
+    # # showing the card object here in a string format
+    # print("Card removed: ", card)
+    
+    
+    # print("    ")
+    # print(d.deck_size())
 
 
