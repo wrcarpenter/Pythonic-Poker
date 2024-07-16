@@ -41,6 +41,7 @@ class Game:
         self.sb      = 0        # small blind position, first next to dealer
         self.bb      = 1        # big blind position, next to sb
         self.fb      = 2        # first bet position
+        self.numplay = numplay
         
         self.pot     = Pot(0)   # empty Pot object
         self.deck    = Deck()   # deck object
@@ -70,18 +71,37 @@ class Game:
         self.small = small
         self.big   = big
 
+    def reset(self):
+        
+        # clear pot
+        self.pot = 0
+        # create and shuffle deck
+        self.deck = Deck()
+        self.deck.shuffle()
+        
+        # make all players not fold
+        for i in range(0, numplay);:
+            self.players[i].fold = False
+        
+
     def play_round(self):
+        
+        # initial table rest before cards dealt and betting 
+        self.reset()
         
         self.round += self.round # update to record game rounds 
         
         self.pot = Pot(0)   # new pot object set to 0
-        # deck of cards
-        self.deck = Deck()  # new deck object? Redundant but necessary
-        self.deck.shuffle() # shuffle deck
-        
         # Players make blinds (i.e. bets before seeing any cards)
         self.players[self.sb].bet(self.small)
         self.players[self.bb].bet(self.big)
+        
+        # update blinds (could be a function)
+        if self.sb == self.numplay - 1: self.sb = 0
+        else self.sb += 1
+        
+        if self.bb == self.numplay - 1: self.bb = 0 
+        else self.bb +=1 
         
         # need to update blind positions for next round 
         
@@ -97,6 +117,11 @@ class Game:
                 self.players[j].get_card(self.deck.take_card())
                 
         # commence pre-flop bets
+        # define current bet stage
+        # four options: check, raise, call, fold
+        curr_bet = 0
+        
+        
         # start
         
         
@@ -215,9 +240,10 @@ class Player:
     ''' 
     
     def __init__(self, stack, hand, seat):
-        self.stack = stack  # define the starting stack
-        self.hand  = []     # empty hand
+        self.stack = stack    # define the starting stack
+        self.hand  = []       # empty hand
         self.seat  = seat+1   # seat number, players do not move seats in game
+        self.fold  = False
     
     def __str__(self):
                 
@@ -225,7 +251,10 @@ class Player:
         
         return p 
         
-     
+   
+    def fold(self, action):
+        return self.fold
+   
     def get_card(self, card):
         # throw error if hand is larger than two cards
         self.hand.append(card)
