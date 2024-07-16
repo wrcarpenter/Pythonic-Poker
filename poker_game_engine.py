@@ -74,41 +74,42 @@ class Game:
     def reset(self):
         
         # clear pot
-        self.pot = 0
+        self.pot = Pot(0)
         # create and shuffle deck
         self.deck = Deck()
         self.deck.shuffle()
         
-        # make all players not fold
-        for i in range(0, numplay);:
+        # make all players active
+        for i in range(0, self.numplay):
             self.players[i].fold = False
         
 
-    def play_round(self):
+    def blinds(self):
         
-        # initial table rest before cards dealt and betting 
-        self.reset()
-        
-        self.round += self.round # update to record game rounds 
-        
-        self.pot = Pot(0)   # new pot object set to 0
         # Players make blinds (i.e. bets before seeing any cards)
         self.players[self.sb].bet(self.small)
         self.players[self.bb].bet(self.big)
         
         # update blinds (could be a function)
         if self.sb == self.numplay - 1: self.sb = 0
-        else self.sb += 1
+        else: self.sb += 1
         
         if self.bb == self.numplay - 1: self.bb = 0 
-        else self.bb +=1 
-        
-        # need to update blind positions for next round 
-        
-        
+        else: self.bb +=1 
+                
         # dealer collects blinds
         self.pot.add_blind(self.small) 
         self.pot.add_blind(self.big)
+        
+
+    def play_round(self):
+        
+        # initial table rest before cards dealt and betting 
+        self.reset()
+        # update playing round
+        self.round += self.round # update to record game rounds 
+        # run initial betting for blinds
+        self.blinds()
         
         # Deal out cards to the players
         for i in range(0,2):
@@ -120,13 +121,13 @@ class Game:
         # define current bet stage
         # four options: check, raise, call, fold
         curr_bet = 0
-        
-        
-        # start
-        
-        
-        # this is where the conditional betting model gets complex a bit
-        
+        for i in range(0, self.numplay):
+            # check if folded 
+            if self.players[i].fold is not True:
+                pass
+            else: 
+                pass
+                
         # Deal out 3 flop cards to commumnity
         # Burn card
         self.deck.take_card()
@@ -236,6 +237,7 @@ class Player:
     Stack starts as the game 'buy-in'; all players have same size stack
     Each player has a seat at the table and seats do not change during a game
     
+    Player is where the poker strategy is stored in the 'strat' method right now.
     
     ''' 
     
@@ -251,8 +253,12 @@ class Player:
         
         return p 
         
+    def strat(self, game):
+        # this is where a player needs all game information to make a decision
+        # pass in a game object and analyze it
+        pass
    
-    def fold(self, action):
+    def fold(self):
         return self.fold
    
     def get_card(self, card):
@@ -280,10 +286,6 @@ class Player:
             print("Exception: Bet larger than player stack.")
         
         self.stack = self.stack - betsize    
-      
-    def fold(self):
-        # game needs to update for this 
-        return "Fold"
           
 class Pot:
     
@@ -329,6 +331,11 @@ if __name__ == "__main__":
     
     print('New pot')
     print(g.pot.pot_size())
+
+    print(g.players[0].fold)
+    g.players[0].fold = True
+    print(g.players[0].fold)
+
 
     g.play_round()
     
