@@ -169,10 +169,22 @@ class Card:
     def __init__(self, rank, suit):
         self.rank = rank 
         self.suit = suit
+        self.val  = assign()
    
+    
     
     def __str__(self):
         return self.rank + ' of ' + self.suit
+    
+    def compare(hands, community):
+        # multiple hands and community cards, all card objects
+        # find out what hand each player has and what's the highest
+        # if multiple are the highest then compare the actual values of their 
+        # hands side by side
+        
+        
+        pass
+    
     
 class Deck:
     
