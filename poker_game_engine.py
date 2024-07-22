@@ -12,7 +12,6 @@ import random
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 RANKS = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
 
-
 class Game:
     
     '''
@@ -164,25 +163,32 @@ class Card:
     Creates individual playing cards that are used to create a deck and dealt
     to players.
     
+    Compare method can be optimized further and is currently brute force.
+    
     '''
 
     def __init__(self, rank, suit):
         self.rank = rank 
         self.suit = suit
-        self.val  = assign()
+        self.val  = self.assign()
    
-    
-    
     def __str__(self):
         return self.rank + ' of ' + self.suit
     
     def compare(hands, community):
+        
+        hero = 0 # lowest possible score
+        # Now look at each hand
+        for hand in hands:
+            # Create full array of cards for combination 
+            cards = hand.append(community)
+            # sort by attribute
+            cards = sorted(cards, key=lambda x: x.val, reverse=True)
+            
         # multiple hands and community cards, all card objects
         # find out what hand each player has and what's the highest
         # if multiple are the highest then compare the actual values of their 
         # hands side by side
-        
-        
         pass
     
     
