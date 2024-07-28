@@ -182,7 +182,8 @@ class Card:
            return v
        except:
            return 0
-        
+    
+    # brute force hand evaluation (to be faster, implement an algorithm, etc.)    
     def evaluate(cards):
         pass
         
@@ -195,6 +196,8 @@ class Card:
         for hand in hands:
             # Create full array of cards for combination
             hero = 0
+            
+            # full 7-card 
             cards = hand.append(community)
             
             score = evaluate(cards)
@@ -206,7 +209,7 @@ class Card:
             
             
             
-            cards = sorted(cards, key=lambda x: x.val, reverse=True)
+            cards = sorted(cards, key=lambda x: x.value, reverse=True)
             
         # multiple hands and community cards, all card objects
         # find out what hand each player has and what's the highest
