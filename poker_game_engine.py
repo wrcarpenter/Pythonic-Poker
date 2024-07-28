@@ -70,6 +70,7 @@ class Game:
         self.small = small
         self.big   = big
 
+    
     def reset(self):
         
         # clear pot
@@ -168,28 +169,50 @@ class Card:
     '''
 
     def __init__(self, rank, suit):
-        self.rank = rank 
-        self.suit = suit
-        self.val  = self.assign()
+        self.rank  = rank 
+        self.suit  = suit
+        self.value = self.card_value(rank)
    
     def __str__(self):
         return self.rank + ' of ' + self.suit
     
+    def card_value(self, rank):
+       try:
+           v = int(rank)
+           return v
+       except:
+           return 0
+        
+    def evaluate(cards):
+        pass
+        
+        
+    
     def compare(hands, community):
         
-        hero = 0 # lowest possible score
+     # lowest possible score, find the highest
         # Now look at each hand
         for hand in hands:
-            # Create full array of cards for combination 
+            # Create full array of cards for combination
+            hero = 0
             cards = hand.append(community)
+            
+            score = evaluate(cards)
+            
+            
             # sort by attribute
+            # all the cards sorted
+            
+            
+            
+            
             cards = sorted(cards, key=lambda x: x.val, reverse=True)
             
         # multiple hands and community cards, all card objects
         # find out what hand each player has and what's the highest
         # if multiple are the highest then compare the actual values of their 
         # hands side by side
-        pass
+        return 0
     
     
 class Deck:
@@ -283,7 +306,7 @@ class Player:
         # throw error if hand is larger than two cards
         self.hand.append(card)
         
-    def hand(self):
+    def show_hand(self):
         h = ''
         for c in self.hand:
             h = h + str(c) + " | "
@@ -328,38 +351,22 @@ class Pot:
 
 # Testing 
 if __name__ == "__main__":
-    
+
+    # Create new Game
     g = Game(10, 20, 300, 6)
-
     
-    print(g.pot.pot_size())
-    print('-------------')
-    
-
-    print(g.deck)
-    
-    print(g.sb)
+    print("Blinds: ")
+    print()
     print(g.bb)
-    print(g.buyin)
-    print(type(g.small))
+    print(g.sb)
     
-    print(g.players[0].stack_size())
-    print(g.players[1].stack_size())
-    
-    
-    print('New pot')
-    print(g.pot.pot_size())
-
-    print(g.players[0].fold)
-    g.players[0].fold = True
-    print(g.players[0].fold)
-
-
+    # create a round, no betting but see that each player has cards
     g.play_round()
     
-    for i in range(0, len(g.players)):    
-        print(g.players[i])
-        print("__________\n")
+    # shows player
+    print(g.players[0])
+    
+    print(g.players[0].show_hand())
     
     
     
