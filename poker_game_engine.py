@@ -29,7 +29,6 @@ class Game:
     
     There is no min-raise set either.
     
-    
     '''
     
     def __init__(self, small, big, buyin, numplay):
@@ -111,6 +110,7 @@ class Game:
         # run initial betting for blinds
         self.blinds()
         
+        
         # Deal out cards to the players
         for i in range(0,2):
             for j in range(0, len(self.players)):
@@ -155,6 +155,40 @@ class Game:
         # define number of players in game and initilize their stacks
         # need to define intial empty set of community cards
         # need to define a deck for the game?? then this deck can be reshuffled
+    
+    def evaluate(self, hand, community, hero):
+        
+        # Nine levels to poker hand rankings
+        # royal flush:     9
+        # straight flush:  8
+        # four of a kind:  7
+        # full house:      6
+        # flush:           5
+        # straight:        4
+        # three of a kind: 3
+        # two pair:        2
+        # one pair:        1
+        # high card:       0    
+        
+        
+        for card in hand:
+            print(card)
+        
+        print("Evaluating!! Welcome.")
+        
+        return 0
+        
+        # now need to sort through and get a slice of the array unless.
+        
+        # hand is a list of card objects and community is a list of card objects.
+        
+        # Hero is the best hand seen so far amoungst all players. Right now, 
+        # that is being kept at zero.
+        
+        # 21 possible combinations
+        
+        
+        
         
 class Card:
     
@@ -171,34 +205,65 @@ class Card:
     def __init__(self, rank, suit):
         self.rank  = rank 
         self.suit  = suit
-        self.value = self.card_value(rank)
+        self.value = self.assign_value()
    
     def __str__(self):
         return self.rank + ' of ' + self.suit
     
-    def card_value(self, rank):
-       try:
-           v = int(rank)
+    def assign_value(self):
+      
+        try:
+           v = int(self.rank)
            return v
-       except:
-           return 0
+       # Royal cards and the Ace
+        except:
+           if   self.rank =="Jack":  return 11
+           elif self.rank =="Queen": return 12
+           elif self.rank =="King":  return 13
+           else:                     return 14
     
     # brute force hand evaluation (to be faster, implement an algorithm, etc.)    
-    def evaluate(cards):
+    def evaluate(hand, community):
+        
+        '''
+        Hand is a given player's hand.
+        Community is the 5-card shared at the table.
+        There will be 21 combinations to evaluate for the hand. But the 
+        algorithm can be faster by tracking best hand encounterd so far.
+        
+        For each hand, compute the type of hand and the score of that type.
+        
+        '''
+        
+        cards = sorted(cards, key=lambda x: x.value, reverse=True)
+        
+        # this is where you do your math
         pass
         
-        
-    
+    # at the end of a round, determine winner 
     def compare(hands, community):
+        
+        print("comparing!")
+        return 0
         
      # lowest possible score, find the highest
         # Now look at each hand
         for hand in hands:
-            # Create full array of cards for combination
-            hero = 0
+            person = 0
+            score = 0
+            # brute force evaluation
+            result = evaluate(hand, community)
             
-            # full 7-card 
-            cards = hand.append(community)
+            if result > hero: 
+                hero   = result
+                person = se  
+            else: continue  
+            
+            
+             
+            
+            
+            
             
             score = evaluate(cards)
             
@@ -209,7 +274,7 @@ class Card:
             
             
             
-            cards = sorted(cards, key=lambda x: x.value, reverse=True)
+            
             
         # multiple hands and community cards, all card objects
         # find out what hand each player has and what's the highest
@@ -308,7 +373,11 @@ class Player:
     def get_card(self, card):
         # throw error if hand is larger than two cards
         self.hand.append(card)
-        
+    
+    def get_hand(self):
+        # returning list of both cards a player holds
+        return [self.first_card(), self.second_card()]
+    
     def show_hand(self):
         h = ''
         for c in self.hand:

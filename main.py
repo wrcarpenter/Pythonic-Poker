@@ -1,14 +1,19 @@
 # Poker Engine Testing 
+# W Carpenter
+# August 2024
+
 
 from importlib import reload
-import poker_game_engine as game_engine
+import poker_game_engine as engine
 
 if __name__ == "__main__":
         
-    reload(game_engine)
+    # In case new changes were made
+    reload(engine)
         
     # Create new Game
-    g = Game(10, 20, 300, 6)
+    # Small blind, big blind, buy-in amount, number of players
+    g = engine.Game(10, 20, 300, 6)
     
     print("Blinds: ")
     print()
@@ -19,12 +24,17 @@ if __name__ == "__main__":
     g.play_round()
     
     # shows player
-    print(g.players[0])
+    # print(g.players[0])
+    #print(g.players[0].show_hand())
     
-    print(g.players[0].show_hand())
+    # Looking at a players cards
+    for item in g.players[0].get_hand():
+        print(item)
+        print(item.card_value)
 
     
-    
+
+
     
     
     
