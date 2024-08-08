@@ -2,6 +2,8 @@
 # Willam Carpenter
 # June 2024
 
+# https://www.cs.emory.edu/~cheung/Courses/170/Syllabus/10/pokerCheck.html
+
 # An excercise in object-oriented programming and game strategy. 
 # Game engine underpins poker strategies and game data collection. 
 
@@ -106,10 +108,9 @@ class Game:
         # initial table rest before cards dealt and betting 
         self.reset()
         # update playing round
-        self.round += self.round # update to record game rounds 
+        self.round += self.round 
         # run initial betting for blinds
         self.blinds()
-        
         
         # Deal out cards to the players
         for i in range(0,2):
@@ -118,8 +119,6 @@ class Game:
                 self.players[j].get_card(self.deck.take_card())
                 
         # commence pre-flop bets
-        # define current bet stage
-        # four options: check, raise, call, fold
         curr_bet = 0
         for i in range(0, self.numplay):
             # check if folded 
@@ -131,31 +130,19 @@ class Game:
         # Deal out 3 flop cards to commumnity
         # Burn card
         self.deck.take_card()
+        
         # Deal out flop
         for i in range(0,3):
             self.commun.append(self.deck.take_card())
         
-        # next round of betting here
+        # deal out the turn
+        self.deck.take_card()
+        self.commun.append(self.deck.take_card())
         
-        # players make pre-flop bets
-        # need to handle the event of bet, raise, reraise, etc.
-    
-        # 'create a deck' and shuffle it (dealer is doing this)
-        # create a new pot 
-        # create a new empty set of community cards
-        # determine who is the sb and bb 
-        # commence initial sb and bb into pot
-        # commence dealing cards
-        # commence first round of betting from players pre-flop
-        # commence flop 
-        # commence betting round 
-        # etc
-
-        # pot should be created and set to zero
-        # define number of players in game and initilize their stacks
-        # need to define intial empty set of community cards
-        # need to define a deck for the game?? then this deck can be reshuffled
-    
+        # deal out the river 
+        self.deck.take_card()
+        self.commun.append(self.deck.take_card())
+                
     def evaluate(self, hand, community, hero):
         
         # Nine levels to poker hand rankings
@@ -170,14 +157,17 @@ class Game:
         # one pair:        1
         # high card:       0    
         
+        # need to filter through the cards
         
-        for card in hand:
-            print(card)
-        
-        print("Evaluating!! Welcome.")
+        # determine all the combinations
+        # # create lists of possible hands: 21 total
+        card_hands = self.combinations(hand, community)
         
         return 0
         
+    
+        # cards = sorted(cards, key=lambda x: x.value, reverse=True)
+    
         # now need to sort through and get a slice of the array unless.
         
         # hand is a list of card objects and community is a list of card objects.
@@ -187,7 +177,34 @@ class Game:
         
         # 21 possible combinations
         
+            
+    def combinations(self, hand, community):
         
+        # print("Combinations code function:")
+        
+        for card in hand:
+            print(card)
+        
+        for i in community:
+            print(i, "value: ", i.value)
+        
+        return 0
+        
+    # this is 
+        comb = []               # empty list of combinations w/ card objects 
+        
+        comb.append(community)  # all community cards
+        
+        # adding all possible combos using one card from the player hand 
+        for card in hand:
+            for i in range(0,5):
+                combo    = community
+                combo[i] = card
+                comb.append(combo)
+                
+        # adding all possible comobs using two cards from the player hand
+                
+        return comb
         
         
 class Card:
@@ -421,7 +438,8 @@ class Pot:
         
         return self.size 
 
-# Testing 
+
+# Unit Testing 
 if __name__ == "__main__":
 
     # Create new Game
@@ -440,39 +458,5 @@ if __name__ == "__main__":
     
     print(g.players[0].show_hand())
     
-    
-    
-    # create a game
-    # for person in g.players:
-    #   print(person)
-
-    # # creates a fresh deck of 52 cards, not shuffled 
-    # d = Deck()
-    
-    # print(d)
-    # print("   ")
-    
-    # print("Size of the created deck: ", d.deck_size())
-    # print("   ")
-    
-    # print("Shuffling deck...")
-    # d.shuffle()
-    # print("    ")
-    # print("New Deck:")
-    # print("         ")
-    # print(d)
-    
-    
-    # print("Removing card from the deck...")    
-    
-    # # taking a card object
-    # card = d.take_card()
-    # print("   ")
-    # # showing the card object here in a string format
-    # print("Card removed: ", card)
-    
-    
-    # print("    ")
-    # print(d.deck_size())
 
 
