@@ -3,12 +3,12 @@
 # June 2024
 
 # https://www.cs.emory.edu/~cheung/Courses/170/Syllabus/10/pokerCheck.html
-
 # An excercise in object-oriented programming and game strategy. 
 # Game engine underpins poker strategies and game data collection. 
 
 import numpy as np
 import random
+import itertools
 
 # Card deck constraints
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
@@ -142,68 +142,84 @@ class Game:
         # deal out the river 
         self.deck.take_card()
         self.commun.append(self.deck.take_card())
-                
+       
+        
+    def isflush(self, cards):
+        
+        pass
+        
+        assert len(cards) == 5
+        
+        c = sorted(cards, key=lambda x: x.suit, reverse=True)
+        
+        if c[0] == c[4]:
+            flush_value = 0
+            return [1, flush_value] 
+        
+        
+        else:
+            return False
+        
+        
+    
     def evaluate(self, hand, community, hero):
         
-        # Nine levels to poker hand rankings
-        # royal flush:     9
-        # straight flush:  8
-        # four of a kind:  7
-        # full house:      6
-        # flush:           5
-        # straight:        4
-        # three of a kind: 3
-        # two pair:        2
-        # one pair:        1
-        # high card:       0    
+        # idea is to find the best hand for a player and 'climb up' through
+        # possible combinations which hopefully increases efficiency
+        # comes after compare method for this code.
         
-        # need to filter through the cards
+        score = 0     # hand 'score' at lowest possible combo
         
-        # determine all the combinations
-        # # create lists of possible hands: 21 total
+        # define all function names
+        poker_hands = ['is_flush'
+                       'is_straight',
+                       'is_four',
+                       'is_full',
+                       'is_three', 
+                       'is_two',
+                       'is_one',
+                       'high'    ]
+        
+        # get all possible hands for a player (21 total)
         card_hands = self.combinations(hand, community)
         
-        return 0
+        assert len(card_hands) == 21
+        
         
     
-        # cards = sorted(cards, key=lambda x: x.value, reverse=True)
     
-        # now need to sort through and get a slice of the array unless.
         
-        # hand is a list of card objects and community is a list of card objects.
         
-        # Hero is the best hand seen so far amoungst all players. Right now, 
-        # that is being kept at zero.
         
-        # 21 possible combinations
         
-            
+        
+        return card_hands
+    
+        
     def combinations(self, hand, community):
         
-        # print("Combinations code function:")
-        
-        for card in hand:
-            print(card)
-        
-        for i in community:
-            print(i, "value: ", i.value)
-        
-        return 0
-        
-    # this is 
+
         comb = []               # empty list of combinations w/ card objects 
+        three_pairs = [list(ele) for ele in itertools.combinations(community,3)]
         
         comb.append(community)  # all community cards
         
         # adding all possible combos using one card from the player hand 
         for card in hand:
             for i in range(0,5):
-                combo    = community
+                combo    = community[:]
                 combo[i] = card
+                # sorting cards by rank value
+                combo    = sorted(combo, key=lambda x: x.value, reverse=False)
+                
                 comb.append(combo)
-                
-        # adding all possible comobs using two cards from the player hand
-                
+        
+        for p in three_pairs:
+            combo  = p[:] + hand[:]
+            
+            combo = sorted(combo, key=lambda x: x.value, reverse=False)
+            comb.append(combo)
+
         return comb
         
         
